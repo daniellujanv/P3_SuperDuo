@@ -1,6 +1,7 @@
-package barqsoft.footballscores;
+package barqsoft.footballscores.fragments;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,12 +9,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.format.Time;
+import android.transition.Slide;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+
+import barqsoft.footballscores.MainActivity;
+import barqsoft.footballscores.R;
+import barqsoft.footballscores.fragments.MainScreenFragment;
+import barqsoft.footballscores.widget.WidgetProvider;
 
 /**
  * Created by yehya khaled on 2/27/2015.
@@ -24,23 +34,54 @@ public class PagerFragment extends Fragment
     public ViewPager mPagerHandler;
     private myPageAdapter mPagerAdapter;
     private MainScreenFragment[] viewFragments = new MainScreenFragment[5];
+    private String TAG = getClass().getSimpleName();
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.pager_fragment, container, false);
         mPagerHandler = (ViewPager) rootView.findViewById(R.id.pager);
         mPagerAdapter = new myPageAdapter(getChildFragmentManager());
+        int toSelect = -1;
+        Long selectedGameTime = null;
+        Calendar calendarSelected = null;
+        if(getArguments() != null){
+            selectedGameTime = getArguments().getLong(WidgetProvider.EXTRA_DATE);
+            Log.i(TAG, "selectedGameTime :: " + selectedGameTime);
+
+            calendarSelected = Calendar.getInstance();
+            calendarSelected.setTimeInMillis(selectedGameTime);
+
+        }
+
+
         for (int i = 0;i < NUM_PAGES;i++)
         {
-            Date fragmentdate = new Date(System.currentTimeMillis()+((i-2)*86400000));
+
+            Date fragmentdate = new Date(System.currentTimeMillis()+((i-2)*86400000)); //TODO set time based on Locale
+            Log.i("PagerFragment", "fragmentDate :: "+fragmentdate.getTime());
             SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
             viewFragments[i] = new MainScreenFragment();
             viewFragments[i].setFragmentDate(mformat.format(fragmentdate));
+            viewFragments[i].setTitle(mPagerAdapter.getPageTitle(i).toString());
+
+            if(calendarSelected != null){
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(fragmentdate);
+                if(calendarsMatch(calendar, calendarSelected)){
+                    toSelect = i;
+//                    Log.i(TAG, "SON IGUALEEEEES");
+                }
+            }
         }
         mPagerHandler.setAdapter(mPagerAdapter);
         mPagerHandler.setCurrentItem(MainActivity.current_fragment);
+        if(toSelect != -1){
+            mPagerHandler.setCurrentItem(toSelect);
+        }
         return rootView;
     }
+
     private class myPageAdapter extends FragmentStatePagerAdapter
     {
         @Override
@@ -91,5 +132,10 @@ public class PagerFragment extends Fragment
                 return dayFormat.format(dateInMillis);
             }
         }
+    }
+
+    private boolean calendarsMatch(Calendar calendarOne, Calendar calendarTwo){
+        return (calendarOne.get(Calendar.DAY_OF_YEAR) == calendarTwo.get(Calendar.DAY_OF_YEAR))
+                && (calendarOne.get(Calendar.YEAR) == calendarTwo.get(Calendar.YEAR));
     }
 }

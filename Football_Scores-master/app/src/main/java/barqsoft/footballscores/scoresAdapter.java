@@ -6,7 +6,10 @@ import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -37,6 +40,8 @@ public class scoresAdapter extends CursorAdapter
         View mItem = LayoutInflater.from(context).inflate(R.layout.scores_list_item, parent, false);
         ViewHolder mHolder = new ViewHolder(mItem);
         mItem.setTag(mHolder);
+        Animation animation = AnimationUtils.makeInAnimation(context, true);
+        mItem.setAnimation(animation);
         //Log.v(FetchScoreTask.LOG_TAG,"new View inflated");
         return mItem;
     }
@@ -64,7 +69,8 @@ public class scoresAdapter extends CursorAdapter
         if(mHolder.match_id == detail_match_id)
         {
             //Log.v(FetchScoreTask.LOG_TAG,"will insert extraView");
-
+            Animation animation = AnimationUtils.makeInChildBottomAnimation(context);
+            v.setAnimation(animation);
             container.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
                     , ViewGroup.LayoutParams.MATCH_PARENT));
             TextView match_day = (TextView) v.findViewById(R.id.matchday_textview);

@@ -2,9 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="barqsoft.footballscores" >
 
-    <uses-permission
-        android:name="android.permission.INTERNET"
-        android:maxSdkVersion="22" />
+    <uses-permission android:name="android.permission.INTERNET"  />
 
     <application
         android:allowBackup="true"
@@ -22,7 +20,7 @@
         </activity>
 
         <provider
-            android:name=".ScoresProvider"
+            android:name=".data.ScoresProvider"
             android:authorities="barqsoft.footballscores" />
 
         <activity
@@ -34,6 +32,21 @@
                 android:value="barqsoft.footballscores.MainActivity" />
         </activity>
         <service android:name=".service.myFetchService" />
+
+
+        <service android:name=".widget.WidgetListViewService"
+        android:permission="android.permission.BIND_REMOTEVIEWS"
+            />
+
+        <receiver android:name=".widget.WidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="football_scores.action.WIDGET_DATASETCHANGED" />
+                <action android:name="football_scores.action.WIDGET_ONCLICK" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
     </application>
 
 </manifest>

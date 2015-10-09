@@ -1,30 +1,61 @@
 package barqsoft.footballscores;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-public class MainActivity extends ActionBarActivity
+import barqsoft.footballscores.fragments.PagerFragment;
+import barqsoft.footballscores.widget.WidgetProvider;
+
+public class MainActivity extends AppCompatActivity
 {
     public static int selected_match_id;
     public static int current_fragment = 2;
     public static String LOG_TAG = "MainActivity";
     private final String save_tag = "Save Test";
     private PagerFragment my_main;
+    // permission request codes need to be < 256
+    private static final int RC_HANDLE_INTERNET_PERM = 2;
+    private String TAG = getClass().getSimpleName();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(LOG_TAG, "Reached MainActivity onCreate");
-        if (savedInstanceState == null) {
-            my_main = new PagerFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, my_main)
-                    .commit();
+
+        int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
+        if (rc != PackageManager.PERMISSION_GRANTED) {
+            requestInternetPermission();
+        }else{
+
+            if (savedInstanceState == null) {
+
+                Bundle extras = getIntent().getExtras();
+                my_main = new PagerFragment();
+
+                if(extras != null){
+                    Log.i(TAG, "EXTRA_ITEM :: "+ extras.get(WidgetProvider.EXTRA_ITEM));
+                    my_main.setArguments(extras);
+                }
+
+
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, my_main)
+                        .commit();
+            }
         }
+
     }
 
 
@@ -75,5 +106,36 @@ public class MainActivity extends ActionBarActivity
         selected_match_id = savedInstanceState.getInt("Selected_match");
         my_main = (PagerFragment) getSupportFragmentManager().getFragment(savedInstanceState,"my_main");
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    /**
+     * Handles the requesting of the camera permission.  This includes
+     * showing a "Snackbar" message of why the permission is needed then
+     * sending the request.
+     */
+    private void requestInternetPermission() {
+        Log.w(TAG, "Internet permission is not granted. Requesting permission");
+
+        final String[] permissions = new String[]{Manifest.permission.INTERNET};
+
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.INTERNET)) {
+            ActivityCompat.requestPermissions(this, permissions, RC_HANDLE_INTERNET_PERM);
+            return;
+        }
+
+        final Activity thisActivity = this;
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityCompat.requestPermissions(thisActivity, permissions,
+                        RC_HANDLE_INTERNET_PERM);
+            }
+        };
+
+        Snackbar.make(findViewById(R.id.container), R.string.permission_internet_rationale,
+                Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.ok, listener)
+                .show();
     }
 }
