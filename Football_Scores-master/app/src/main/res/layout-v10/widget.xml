@@ -7,7 +7,6 @@
     android:padding="@dimen/widget_margin"
     android:id="@+id/widget_wrapper"
     >
-
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -37,8 +36,4 @@
             android:text="@string/text_matches_today"
             android:id="@+id/matchestext_textview"/>
     </LinearLayout>
-
-
-
-
 </FrameLayout>
