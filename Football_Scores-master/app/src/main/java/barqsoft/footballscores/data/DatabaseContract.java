@@ -16,7 +16,9 @@ public class DatabaseContract
         public static final String LEAGUE_COL = "league";
         public static final String DATE_COL = "date";
         public static final String TIME_COL = "time";
+        public static final String HOME_URL_COL = "home_url";
         public static final String HOME_COL = "home";
+        public static final String AWAY_URL_COL = "away_url";
         public static final String AWAY_COL = "away";
         public static final String HOME_GOALS_COL = "home_goals";
         public static final String AWAY_GOALS_COL = "away_goals";

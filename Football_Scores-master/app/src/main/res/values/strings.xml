@@ -39,4 +39,5 @@
     <string name="permission_internet_rationale">Internet permission is needed to load matches</string>
     <string name="ok">OK</string>
     <string name="no_content">No matches for </string>
+    <string name="text_matches_today">matches for today</string>
 </resources>

@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(LOG_TAG, "Reached MainActivity onCreate");
+//        Log.d(LOG_TAG, "Reached MainActivity onCreate");
 
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
         if (rc != PackageManager.PERMISSION_GRANTED) {
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
                 my_main = new PagerFragment();
 
                 if(extras != null){
-                    Log.i(TAG, "EXTRA_ITEM :: "+ extras.get(WidgetProvider.EXTRA_ITEM));
+//                    Log.i(TAG, "EXTRA_ITEM :: "+ extras.get(WidgetProvider.EXTRA_ITEM));
                     my_main.setArguments(extras);
                 }
 

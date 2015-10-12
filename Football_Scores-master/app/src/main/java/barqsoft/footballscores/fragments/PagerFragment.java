@@ -47,7 +47,7 @@ public class PagerFragment extends Fragment
         Calendar calendarSelected = null;
         if(getArguments() != null){
             selectedGameTime = getArguments().getLong(WidgetProvider.EXTRA_DATE);
-            Log.i(TAG, "selectedGameTime :: " + selectedGameTime);
+//            Log.i(TAG, "selectedGameTime :: " + selectedGameTime);
 
             calendarSelected = Calendar.getInstance();
             calendarSelected.setTimeInMillis(selectedGameTime);
@@ -59,7 +59,7 @@ public class PagerFragment extends Fragment
         {
 
             Date fragmentdate = new Date(System.currentTimeMillis()+((i-2)*86400000)); //TODO set time based on Locale
-            Log.i("PagerFragment", "fragmentDate :: "+fragmentdate.getTime());
+//            Log.i("PagerFragment", "fragmentDate :: "+fragmentdate.getTime());
             SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
             viewFragments[i] = new MainScreenFragment();
             viewFragments[i].setFragmentDate(mformat.format(fragmentdate));
@@ -79,6 +79,7 @@ public class PagerFragment extends Fragment
         if(toSelect != -1){
             mPagerHandler.setCurrentItem(toSelect);
         }
+        mPagerHandler.setOffscreenPageLimit(2);
         return rootView;
     }
 

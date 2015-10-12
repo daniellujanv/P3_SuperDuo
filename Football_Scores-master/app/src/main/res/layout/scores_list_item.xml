@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:elevation="4dp"
     android:background="@drawable/list_item"
     android:id="@+id/listitem_wrapper"
@@ -44,7 +44,7 @@
                 android:text="@string/test_text"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textSize="@dimen/Score"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:id="@+id/score_textview"/>
             <TextView
                 android:layout_width="wrap_content"

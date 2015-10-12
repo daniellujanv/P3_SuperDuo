@@ -30,6 +30,8 @@ public class ScoresDBHelper extends SQLiteOpenHelper
                 + DatabaseContract.scores_table.AWAY_GOALS_COL + " TEXT NOT NULL,"
                 + DatabaseContract.scores_table.MATCH_ID + " INTEGER NOT NULL,"
                 + DatabaseContract.scores_table.MATCH_DAY + " INTEGER NOT NULL,"
+                + DatabaseContract.scores_table.HOME_URL_COL + " TEXT NOT NULL,"
+                + DatabaseContract.scores_table.AWAY_URL_COL + " TEXT NOT NULL,"
                 + " UNIQUE ("+ DatabaseContract.scores_table.MATCH_ID+") ON CONFLICT REPLACE"
                 + " );";
         db.execSQL(CreateScoresTable);

@@ -46,12 +46,13 @@ class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public void onCreate() {
-        mCursor = mContext.getContentResolver().query( DatabaseContract.BASE_CONTENT_URI, null, null, null, null);
+        mCursor = mContext.getContentResolver().query(
+                DatabaseContract.BASE_CONTENT_URI, null, null, null,
+                DatabaseContract.scores_table.DATE_COL+" DESC");
     }
 
     @Override
     public void onDataSetChanged() {
-
     }
 
     @Override

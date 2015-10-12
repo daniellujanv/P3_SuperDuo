@@ -161,11 +161,14 @@ public class myFetchService extends IntentService
         final String SELF = "self";
         final String MATCH_DATE = "date";
         final String HOME_TEAM = "homeTeamName";
+        final String HOME_URL_TEAM = "homeTeam";
+        final String AWAY_URL_TEAM = "awayTeam";
         final String AWAY_TEAM = "awayTeamName";
         final String RESULT = "result";
         final String HOME_GOALS = "goalsHomeTeam";
         final String AWAY_GOALS = "goalsAwayTeam";
         final String MATCH_DAY = "matchday";
+        final String HREF = "href";
 
         //Match data
         String League = null;
@@ -177,6 +180,8 @@ public class myFetchService extends IntentService
         String Away_goals = null;
         String match_id = null;
         String match_day = null;
+        String home_url = null;
+        String away_url = null;
 
 
         try {
@@ -190,7 +195,7 @@ public class myFetchService extends IntentService
 
                 JSONObject match_data = matches.getJSONObject(i);
                 League = match_data.getJSONObject(LINKS).getJSONObject(SOCCER_SEASON).
-                        getString("href");
+                        getString(HREF);
                 League = League.replace(SEASON_LINK,"");
                 //This if statement controls which leagues we're interested in the data from.
                 //add leagues here in order to have them be added to the DB.
@@ -206,8 +211,9 @@ public class myFetchService extends IntentService
                         League.equals(PRIMERA_LIGA)        ||
                         League.equals(EREDIVISIE)          ||
                         League.equals(PRIMERA_DIVISION)    ||
-                        League.equals(SEGUNDA_DIVISION)    ||
-                        League.equals(TESTING)      )
+                        League.equals(SEGUNDA_DIVISION)
+                        || League.equals(TESTING)
+                        )
                 {
                     match_id = match_data.getJSONObject(LINKS).getJSONObject(SELF).
                             getString("href");
@@ -219,7 +225,7 @@ public class myFetchService extends IntentService
 
                     mDate = match_data.getString(MATCH_DATE);
                     mTime = mDate.substring(mDate.indexOf("T") + 1, mDate.indexOf("Z"));
-                    mDate = mDate.substring(0,mDate.indexOf("T"));
+                    mDate = mDate.substring(0, mDate.indexOf("T"));
                     SimpleDateFormat match_date = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
                     match_date.setTimeZone(TimeZone.getTimeZone("UTC"));
                     try {
@@ -244,6 +250,12 @@ public class myFetchService extends IntentService
                     }
                     Home = match_data.getString(HOME_TEAM);
                     Away = match_data.getString(AWAY_TEAM);
+
+                    home_url = match_data.getJSONObject(LINKS)
+                            .getJSONObject(HOME_URL_TEAM).getString(HREF);
+                    away_url = match_data.getJSONObject(LINKS)
+                            .getJSONObject(AWAY_URL_TEAM).getString(HREF);
+
                     Home_goals = match_data.getJSONObject(RESULT).getString(HOME_GOALS);
                     Away_goals = match_data.getJSONObject(RESULT).getString(AWAY_GOALS);
                     match_day = match_data.getString(MATCH_DAY);
@@ -251,6 +263,8 @@ public class myFetchService extends IntentService
                     match_values.put(DatabaseContract.scores_table.MATCH_ID,match_id);
                     match_values.put(DatabaseContract.scores_table.DATE_COL,mDate);
                     match_values.put(DatabaseContract.scores_table.TIME_COL,mTime);
+                    match_values.put(DatabaseContract.scores_table.HOME_URL_COL,home_url);
+                    match_values.put(DatabaseContract.scores_table.AWAY_URL_COL, away_url);
                     match_values.put(DatabaseContract.scores_table.HOME_COL,Home);
                     match_values.put(DatabaseContract.scores_table.AWAY_COL,Away);
                     match_values.put(DatabaseContract.scores_table.HOME_GOALS_COL,Home_goals);
@@ -277,8 +291,8 @@ public class myFetchService extends IntentService
             /**
              * notify widget to update
              */
-            Intent intent = new Intent(WidgetProvider.WIDGET_DATASETCHANGED);
-            mContext.sendBroadcast(intent);
+//            Intent intent = new Intent(WidgetProvider.WIDGET_DATASETCHANGED);
+//            mContext.sendBroadcast(intent);
 
 
             Log.v(LOG_TAG,"Successfully Inserted : " + inserted_data);

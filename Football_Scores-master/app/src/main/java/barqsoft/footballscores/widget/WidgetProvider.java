@@ -3,6 +3,7 @@ package barqsoft.footballscores.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,11 +28,10 @@ public class WidgetProvider extends AppWidgetProvider{
     @Override
     public void onReceive(Context context, Intent intent){
         super.onReceive(context, intent);
-        if(WIDGET_DATASETCHANGED.equals(intent.getAction())){
-            Log.d(TAG, "received DATASETCHANGED intent");
-
-        }
-        else if(WIDGET_ONCLICK.equals(intent.getAction())){
+//        if(WIDGET_DATASETCHANGED.equals(intent.getAction())){
+////            Log.d(TAG, "received DATASETCHANGED intent");
+//        }else
+        if(WIDGET_ONCLICK.equals(intent.getAction())){
             Intent mainIntent = new Intent(context, MainActivity.class);
             mainIntent.putExtras(intent.getExtras());
             mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -45,32 +45,34 @@ public class WidgetProvider extends AppWidgetProvider{
 
         // Perform this loop procedure for each App Widget that belongs to this provider
         for (int i = 0; i < N; i++) {
-            // Set up the intent that starts the StackViewService, which will
-            // provide the views for this collection.
-            Intent serviceIntent = new Intent(context, WidgetListViewService.class);
+
+
             // Add the app widget ID to the intent extras.
-//            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-//            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
             // Instantiate the RemoteViews object for the app widget layout.
-            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
-            // Set up the RemoteViews object to use a RemoteViews adapter.
-            // This adapter connects
-            // to a RemoteViewsService  through the specified intent.
-            // This is how you populate the data.
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                rv.setRemoteAdapter(R.id.widget_listView, serviceIntent);
-            }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
+
+                // Set up the RemoteViews object to use a RemoteViews adapter.
+                // This adapter connects
+                // to a RemoteViewsService  through the specified intent.
+                // This is how you populate the data.
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    // Set up the intent that starts the StackViewService, which will
+                    // provide the views for this collection.
+                    Intent serviceIntent = new Intent(context, WidgetListViewService.class);
+                    rv.setRemoteAdapter(R.id.widget_listView, serviceIntent);
+                }else {
+                    // Set up the intent that starts the StackViewService, which will
+                    // provide the views for this collection.
+                    Intent serviceIntent = new Intent(context, WidgetListViewService.class);
                     rv.setRemoteAdapter(appWidgetIds[i], R.id.widget_listView, serviceIntent);
-            }
-            // The empty view is displayed when the collection has no items.
-            // It should be in the same layout used to instantiate the RemoteViews
-            // object above.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                }
+
+                // The empty view is displayed when the collection has no items.
+                // It should be in the same layout used to instantiate the RemoteViews
+                // object above.
                 rv.setEmptyView(R.layout.widget, R.id.widget_emptyView);
-            }
 
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 // This section makes it possible for items to have individualized behavior.
                 // It does this by setting up a pending intent template. Individuals items of a collection
                 // cannot set up their own pending intents. Instead, the collection as a whole sets
@@ -82,16 +84,26 @@ public class WidgetProvider extends AppWidgetProvider{
                 // broadcasting TOAST_ACTION.
                 toastIntent.setAction(WidgetProvider.WIDGET_ONCLICK);
                 toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-                PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-                rv.setPendingIntentTemplate(R.id.widget_listView, toastPendingIntent);
+                PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(
+                        context, 0, toastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                rv.setPendingIntentTemplate(R.id.widget_listView, onClickPendingIntent);
+
+
+                Intent intent = new Intent(context, MainActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                rv.setOnClickPendingIntent(R.id.widget_listview_wrapper, pendingIntent);
+
+                appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
+
+//                Intent intent = new Intent(context, MainActivity.class);
+//                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+//                rv.setOnClickPendingIntent(R.id.widget_listview_wrapper, pendingIntent);
+            }else{
+                /**
+                 * Service to populate pre honeycomb view
+                 */
+                context.startService(new Intent(context, WidgetSimpleService.class));
             }
-
-            Intent intent = new Intent(context, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-            rv.setOnClickPendingIntent(R.id.widget_listview_wrapper, pendingIntent);
-
-            appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
         }
     }
 }

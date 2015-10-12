@@ -35,8 +35,9 @@
 
 
         <service android:name=".widget.WidgetListViewService"
-        android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
             />
+        <service android:name=".widget.WidgetSimpleService" />
 
         <receiver android:name=".widget.WidgetProvider" >
             <intent-filter>
