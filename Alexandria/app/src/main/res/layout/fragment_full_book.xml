@@ -86,6 +86,7 @@
                         android:id="@+id/authors"
                         android:layout_weight="1"
                         android:textStyle="bold"
+                        android:nextFocusDown="@id/delete_button"
                         android:gravity="right|top"/>
                 </LinearLayout>
                 <!--<ImageButton-->
@@ -114,6 +115,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:nextFocusUp="@id/authors"
                 android:text="@string/delete"
                 style="?android:attr/buttonBarButtonStyle"
                 android:id="@+id/delete_button"
