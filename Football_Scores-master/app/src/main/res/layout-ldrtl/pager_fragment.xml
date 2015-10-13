@@ -7,6 +7,7 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layoutDirection="rtl"
+        android:textDirection="rtl"
         android:layout_height="match_parent">
         <android.support.v4.view.PagerTabStrip
             android:id="@+id/pager_header"
@@ -15,6 +16,7 @@
             android:layout_gravity="top"
             android:paddingBottom="4dp"
             android:layoutDirection="rtl"
+            android:textDirection="rtl"
             android:paddingTop="4dp" />
         ></android.support.v4.view.ViewPager>
 

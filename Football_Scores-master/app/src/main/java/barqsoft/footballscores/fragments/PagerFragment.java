@@ -31,10 +31,17 @@ import barqsoft.footballscores.widget.WidgetProvider;
 public class PagerFragment extends Fragment
 {
     public static final int NUM_PAGES = 5;
+    public static final String DATE_INDEX = "date";
     public ViewPager mPagerHandler;
     private myPageAdapter mPagerAdapter;
-    private MainScreenFragment[] viewFragments = new MainScreenFragment[5];
     private String TAG = getClass().getSimpleName();
+    private MainScreenFragment[] viewFragments = new MainScreenFragment[5];
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -45,26 +52,37 @@ public class PagerFragment extends Fragment
         int toSelect = -1;
         Long selectedGameTime = null;
         Calendar calendarSelected = null;
+        /**
+         * time of selected game
+         */
         if(getArguments() != null){
             selectedGameTime = getArguments().getLong(WidgetProvider.EXTRA_DATE);
-//            Log.i(TAG, "selectedGameTime :: " + selectedGameTime);
-
             calendarSelected = Calendar.getInstance();
             calendarSelected.setTimeInMillis(selectedGameTime);
-
         }
 
 
         for (int i = 0;i < NUM_PAGES;i++)
         {
+            Date fragmentdate = new Date(System.currentTimeMillis()+((i-2)*86400000));
+            Log.i("PagerFragment", "fragmentDate :: "+fragmentdate.getTime());
 
-            Date fragmentdate = new Date(System.currentTimeMillis()+((i-2)*86400000)); //TODO set time based on Locale
-//            Log.i("PagerFragment", "fragmentDate :: "+fragmentdate.getTime());
             SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
+
             viewFragments[i] = new MainScreenFragment();
-            viewFragments[i].setFragmentDate(mformat.format(fragmentdate));
+            /**
+             * This line was causing a WEIRD behaviour in the MSFragment...
+             * passing the date through the intent is better and more reliable
+             */
+//            viewFragments[i].setFragmentDate(mformat.format(fragmentdate));
             viewFragments[i].setTitle(mPagerAdapter.getPageTitle(i).toString());
 
+            Bundle args = new Bundle();
+            args.putString(DATE_INDEX, mformat.format(fragmentdate));
+            viewFragments[i].setArguments(args);
+            /**
+             * if day of selected game  == day of page .. then start in this page
+             */
             if(calendarSelected != null){
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(fragmentdate);
@@ -75,11 +93,12 @@ public class PagerFragment extends Fragment
             }
         }
         mPagerHandler.setAdapter(mPagerAdapter);
-        mPagerHandler.setCurrentItem(MainActivity.current_fragment);
+        mPagerHandler.setOffscreenPageLimit(2);
         if(toSelect != -1){
             mPagerHandler.setCurrentItem(toSelect);
+        }else{
+            mPagerHandler.setCurrentItem(MainActivity.current_fragment);
         }
-        mPagerHandler.setOffscreenPageLimit(2);
         return rootView;
     }
 

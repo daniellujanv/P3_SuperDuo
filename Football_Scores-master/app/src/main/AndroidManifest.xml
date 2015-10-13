@@ -3,6 +3,7 @@
     package="barqsoft.footballscores" >
 
     <uses-permission android:name="android.permission.INTERNET"  />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -26,7 +27,7 @@
 
         <activity
             android:name=".AboutActivity"
-            android:label="About"
+            android:label="@string/about"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

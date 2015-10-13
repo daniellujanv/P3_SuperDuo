@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +27,8 @@ import java.util.Vector;
 import barqsoft.footballscores.Utilies;
 import barqsoft.footballscores.data.DatabaseContract;
 import barqsoft.footballscores.R;
+import barqsoft.footballscores.fragments.MainScreenFragment;
+import barqsoft.footballscores.utils.Utils;
 import barqsoft.footballscores.widget.WidgetProvider;
 
 /**
@@ -42,9 +45,15 @@ public class myFetchService extends IntentService
     @Override
     protected void onHandleIntent(Intent intent)
     {
-        getData("n2");
-        getData("p2");
-
+        boolean network_available = intent.getExtras()
+                .getBoolean(MainScreenFragment.NETWORK_AVAILABLE_INDEX, true);
+        /**
+         * no point on making a request without internet connection
+         */
+        if(network_available) {
+            getData("n2");
+            getData("p2");
+        }
         return;
     }
 

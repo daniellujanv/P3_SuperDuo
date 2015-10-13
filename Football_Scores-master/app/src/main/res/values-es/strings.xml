@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Football Scores</string>
+    <string name="about">Sobre App</string>
+    <string name="champions_league">UEFA Liga de Campeones</string>
+    <string name="final_text">Final</string>
+    <string name="bundesliga">Bundesliga</string>
+    <string name="about_text">Esta applicación obtiene resultados de partidos de las ligas Premier, Serie A, Bundesliga, Primera División de España y la Liga de Campeones de la UEFA. Todos los partidos son obtenidos de la API gratis de football-data.org. Los logos de los equipos son obtenidos de http://hdlogo.wordpress.com/ con el consentimiento del usuario.  La versión original de esta App fue creada por Yahia Khalid Ibn El Salid Ahmed, y una versión modificada es entregada a los estudiantes del programa Udacity Android Nanodegree. Para reportar fallas o dar sugerencias por favor mandar mail la y.k.ibnelwalid@gmail.com.  En el tiempo inactivo de las ligas, datos no reales serán agregados a la app.</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="dummy_data" translatable="false"></string>
+    <string name="first_knockout_round">Primera fase de descalificación</string>
+    <string name="group_stage_text">Fase de grupos</string>
+    <string name="matchday_text">Día del partido</string>
+    <string name="no_connection">No se pudieron actualizar los partidos... Conectate a Internet!!</string>
+    <string name="no_content">Sin partidos para</string>
+    <string name="ok">Ok</string>
+    <string name="permission_internet_rationale">Es necesario el permiso de Internet para obtener los partidos</string>
+    <string name="premierleague">Liga Premier</string>
+    <string name="primeradivison">Primera División</string>
+    <string name="quarter_final">Cuartos de Final</string>
+    <string name="semi_final">Semi Final</string>
+    <string name="seriaa">Serie A</string>
+    <string name="share_text">Compartir</string>
+    <string name="test_text">Prueba </string>
+    <string name="text_matches_today">partidos para hoy</string>
+    <string name="title_activity_about">Sobre la App</string>
+    <string name="today">Hoy</string>
+    <string name="tomorrow">Mañana</string>
+    <string name="yesterday">Ayer</string>
+</resources>

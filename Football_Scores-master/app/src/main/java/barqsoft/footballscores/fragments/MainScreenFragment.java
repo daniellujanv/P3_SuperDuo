@@ -1,5 +1,6 @@
 package barqsoft.footballscores.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import barqsoft.footballscores.data.DatabaseContract;
 import barqsoft.footballscores.MainActivity;
@@ -22,6 +25,7 @@ import barqsoft.footballscores.R;
 import barqsoft.footballscores.ViewHolder;
 import barqsoft.footballscores.scoresAdapter;
 import barqsoft.footballscores.service.myFetchService;
+import barqsoft.footballscores.utils.Utils;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -33,9 +37,10 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
     private String[] fragmentdate = new String[1];
     private int last_selected_item = -1;
     private String mPageTitle;
+    public static final String NETWORK_AVAILABLE_INDEX = "network_available";
 
-    public MainScreenFragment()
-    {}
+    public MainScreenFragment() {
+    }
 
     public void setTitle(String title){
         mPageTitle = title;
@@ -43,22 +48,36 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
 
     private void update_scores()
     {
+        Context context = getContext();
+        boolean networkAvailable = Utils.isNetworkAvailable(context);
+        if(!networkAvailable) {
+            Toast.makeText(context,
+                    context.getString(R.string.no_connection), Toast.LENGTH_SHORT).show();
+        }
         Intent service_start = new Intent(getActivity(), myFetchService.class);
+        service_start.putExtra(NETWORK_AVAILABLE_INDEX, networkAvailable);
         getActivity().startService(service_start);
     }
-    public void setFragmentDate(String date)
-    {
-        fragmentdate[0] = date;
-    }
+
+//    NOPE
+//    public void setFragmentDate(String date)
+//    {
+//        Log.i("MainScreenFragment", "FRAGMENT :: " + mPageTitle + " ... SETTING DATE :: " + date);
+//        fragmentdate[0] = date;
+//    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
+
+        fragmentdate[0] = getArguments().getString(PagerFragment.DATE_INDEX);
+//        Log.i("MainScreenFragment", "onCreateView .. from ARGS .. DATE :: " + fragmentdate[0]);
+
         update_scores();
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         final ListView score_list = (ListView) rootView.findViewById(R.id.scores_list);
         mAdapter = new scoresAdapter(getActivity(),null,0);
         score_list.setAdapter(mAdapter);
-        getLoaderManager().initLoader(SCORES_LOADER, null, this);
         mAdapter.detail_match_id = MainActivity.selected_match_id;
         score_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -78,6 +97,7 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
         emptyView.setAnimation(animation);
         score_list.setEmptyView(emptyView);
 
+        getLoaderManager().initLoader(SCORES_LOADER, null, this);
 
         return rootView;
     }
@@ -85,6 +105,7 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle)
     {
+        Log.i("MainScreenFragment", "sending fragment date :: " + fragmentdate[0]);
         return new CursorLoader(getActivity(), DatabaseContract.scores_table.buildScoreWithDate(),
                 null,null,fragmentdate, DatabaseContract.scores_table.DATE_COL+" DESC");
     }
@@ -119,6 +140,5 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
     {
         mAdapter.swapCursor(null);
     }
-
 
 }

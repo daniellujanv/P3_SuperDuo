@@ -5,28 +5,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:elevation="4dp"
+    style="@style/LayoutRTL"
     android:background="@drawable/list_item"
     android:id="@+id/listitem_wrapper"
     >
     <LinearLayout
         android:orientation="horizontal" android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/LayoutRTL"
         android:paddingTop="5dp"
         android:contentDescription="@string/cd_list_item"
         >
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            style="@style/LayoutRTL"
             android:layout_weight="1"
             android:orientation="vertical">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/LayoutRTL"
                 android:layout_gravity="center"
                 android:id="@+id/home_crest"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/LayoutRTL"
                 android:layout_gravity="center"
                 android:textSize="@dimen/TeamNames"
                 android:gravity="center"
@@ -37,6 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            style="@style/LayoutRTL"
             android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
@@ -45,12 +51,14 @@
                 android:text="@string/test_text"
                 android:layout_gravity="center"
                 android:gravity="center"
+                style="@style/LayoutRTL"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:id="@+id/score_textview"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                style="@style/LayoutRTL"
                 android:text="@string/test_text"
                 android:layout_gravity="center"
                 android:gravity="center"
@@ -60,15 +68,18 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            style="@style/LayoutRTL"
             android:layout_weight="1"
             android:orientation="vertical">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                style="@style/LayoutRTL"
                 android:id="@+id/away_crest"/>
             <TextView
                 android:layout_width="wrap_content"
+                style="@style/LayoutRTL"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
@@ -79,6 +90,7 @@
     </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
+        style="@style/LayoutRTL"
         android:layout_height="wrap_content"
         android:id="@+id/details_fragment_container">
     </FrameLayout>

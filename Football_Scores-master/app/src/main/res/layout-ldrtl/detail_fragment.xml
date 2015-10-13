@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
-    >
+    style="@style/LayoutRTL"
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/LayoutRTL"
         android:layout_marginTop="20dp">
         <TextView
             android:layout_width="wrap_content"
@@ -16,6 +16,7 @@
             android:layout_weight="1"
             android:text="@string/test_text"
             android:textColor="@android:color/black"
+            style="@style/LayoutRTL"
             android:textSize="@dimen/League"
             android:id="@+id/league_textview"/>
         <TextView
@@ -24,12 +25,14 @@
             android:gravity="center"
             android:layout_weight="1"
             android:text="@string/test_text"
+            style="@style/LayoutRTL"
             android:textSize="@dimen/League"
             android:textColor="@android:color/black"
             android:id="@+id/matchday_textview"/>
     </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
+        style="@style/LayoutRTL"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp">
         <Button
@@ -37,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
+            style="@style/LayoutRTL"
             android:text="@string/share_text"
             android:id="@+id/share_button"
             android:drawableStart="@android:drawable/ic_menu_share"
@@ -48,4 +52,5 @@
             android:contentDescription="@string/cd_share_button"
             />
     </FrameLayout>
+
 </LinearLayout>

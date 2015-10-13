@@ -5,4 +5,9 @@
         <!-- Customize your theme here. -->
     </style>
 
+
+    <style name="LayoutRTL">
+        <item name="android:layoutDirection">rtl</item>
+        <item name="android:textDirection">rtl</item>
+    </style>
 </resources>
