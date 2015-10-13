@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import it.jaschke.alexandria.api.BookListAdapter;
 import it.jaschke.alexandria.api.Callback;
@@ -26,7 +27,8 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
     private ListView bookList;
     private int position = ListView.INVALID_POSITION;
     private EditText searchText;
-
+    private TextView mEmptyView;
+    private String mEmptyViewText;
     private final int LOADER_ID = 10;
 
     public ListOfBooks() {
@@ -57,12 +59,23 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
                     @Override
                     public void onClick(View v) {
                         ListOfBooks.this.restartLoader();
+
+                        if(searchText.getText().length() > 0) {
+                            //change emptyView text to "No books found"
+                            mEmptyViewText = getString(R.string.no_books_search);
+                        }
                     }
                 }
         );
 
         bookList = (ListView) rootView.findViewById(R.id.listOfBooks);
+
         bookList.setAdapter(bookListAdapter);
+        /**
+         * Adding emptyView in listView
+         */
+        mEmptyView = (TextView) rootView.findViewById(R.id.listbooks_no_content);
+        bookList.setEmptyView(mEmptyView);
 
         bookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -117,6 +130,11 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
         if (position != ListView.INVALID_POSITION) {
             bookList.smoothScrollToPosition(position);
         }
+        mEmptyView.setText(mEmptyViewText);
+        //change empty text in case this loadFinish was caused by a search that may result empty
+        //then reset mEmptyViewText to original string
+        mEmptyViewText = getString(R.string.no_books);
+
     }
 
     @Override

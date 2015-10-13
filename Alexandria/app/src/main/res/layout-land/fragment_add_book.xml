@@ -99,18 +99,8 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             >
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:contentDescription="@string/cancel_button"
-                android:layout_weight="1"
-                android:src="@drawable/ic_action_discard"
-                style="?android:attr/buttonBarButtonStyle"
-                android:id="@+id/delete_button"
-                android:visibility="invisible"
-                />
-
+            <!-- given the position of the portrait buttons the user would expect the same order,
+             thus Delete to the "left" (bottom in this case) of Next-->
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
@@ -121,11 +111,28 @@
                 android:visibility="invisible"
                 android:src="@drawable/ic_action_accept"
                 style="?android:attr/buttonBarButtonStyle"
+                />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:contentDescription="@string/cancel_button"
+                android:layout_weight="1"
+                android:src="@drawable/ic_action_discard"
+                style="?android:attr/buttonBarButtonStyle"
+                android:id="@+id/delete_button"
+                android:visibility="invisible"
                 android:layout_gravity="bottom"
                 />
-
-
         </LinearLayout>
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/addbook_no_connection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:text="@string/connect_to_internet"
+        />
 </FrameLayout>

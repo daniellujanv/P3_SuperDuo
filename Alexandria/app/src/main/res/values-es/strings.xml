@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Alexandria</string>
+
+    <!-- Menu Items -->
+    <string name="books">Lista de Libros</string>
+    <string name="scan">Escanear/Agregar Libro</string>
+    <string name="about">Sobre la App</string>
+
+    <string name="navigation_drawer_open" >Abrir menú de navegación</string>
+    <string name="navigation_drawer_close">Abrir menú de navegación</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="scan_button">Escanear</string>
+    <string name="input_hint">Inserta ISBN-13. Sólo números.</string>
+    <string name="book_cover">Cubierta de Libro</string>
+
+    <string name="ok_button">Siguiente</string>
+    <string name="cancel_button">Cancelar</string>
+    <string name="not_found">No se encontraron libros</string>
+    <string name="search">Buscar</string>
+    <string name="delete">Borrar libro</string>
+    <string name="pref_startScreen">Seleccionar pantalla de inicio</string>
+    <string name="title_activity_settings">Ajustes</string>
+    <string name="action_share">Compartir</string>
+    <string name="back_button">Atrás</string>
+    <string name="share_text">Un exelente libro: </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="about_text">
+        La mejor app! Obtiene información sobre libros de una API de Google. Todos los titulos, imágenes, e información de autores viene de ahí. La versión original fué desarrollada por Sascha Jaschke, y una versión modificada fué dada a los estudiantes del programa Android Nanodegree de Udacity.</string>
+
+    <string name="no_books">No hay libros por el momento</string>
+    <string name="no_books_search">No se encontraron libros</string>
+    <string name="book_added">Libro agregado!</string>
+    <string name="connect_to_internet">No hay conexión a Internet...</string>
+    <string name="no_author">Desconocido</string>
+
+    <!-- BarcodeReader strings -->
+    <string name="ok">OK</string>
+    <string name="permission_camera_rationale">Se necesita acceso a la cámara para la detección</string>
+    <string name="no_camera_permission">
+        Esta app no puede correr si no tiene permisos para accesar la cámara. Se va a cerrar ahora.
+    </string>
+
+    <string name="low_storage_error">
+        No se pueden descargar las dependencias por baja memoria del dispositivo</string>
+    <string name="title_activity_main">Ejemplo Barcode Reader</string>
+    <string name="read_barcode">Leer código de barras</string>
+    <string name="auto_focus">Auto enfoque</string>
+    <string name="use_flash">Usar Flash</string>
+    <string name="barcode_success">Código de barras leído exitosamente</string>
+    <string name="barcode_failure">No se capturó el código de barras</string>
+    <string name="barcode_error">"Error leyendo código de barras: %1$s"</string>
+    <string name="barcodedetector_error">
+        Error al descargar librerias para detección de Código de barras… trata más tarde!</string>
+
+</resources>

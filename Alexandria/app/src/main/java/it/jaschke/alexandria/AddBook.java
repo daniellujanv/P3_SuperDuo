@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +22,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.vision.barcode.Barcode;
+
+import it.jaschke.alexandria.barcodeDetection.BarcodeCaptureActivity;
 import it.jaschke.alexandria.data.AlexandriaContract;
 import it.jaschke.alexandria.services.BookService;
 import it.jaschke.alexandria.services.DownloadImage;
+import it.jaschke.alexandria.utils.Utils;
 
 
 public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
     private static final String TAG = "INTENT_TO_SCAN_ACTIVITY";
+    private static final int RC_BARCODE_CAPTURE = 9001;
     private EditText ean;
     private final int LOADER_ID = 1;
     private View rootView;
@@ -56,55 +65,68 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         rootView = inflater.inflate(R.layout.fragment_add_book, container, false);
         ean = (EditText) rootView.findViewById(R.id.ean);
 
-        ean.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //no need
-            }
+        /**
+         * Check internet connection beforehand
+         * ... disable thingies if not connected
+         */
+        if(Utils.isNetworkAvailable(getActivity())) {
+            rootView.findViewById(R.id.addbook_no_connection).setVisibility(View.INVISIBLE);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //no need
-            }
+            ean.setEnabled(true);
+            rootView.findViewById(R.id.scan_button).setEnabled(true);
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                String ean =s.toString();
-                //catch isbn10 numbers
-                if(ean.length()==10 && !ean.startsWith("978")){
-                    ean="978"+ean;
+            ean.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    //no need
                 }
-                if(ean.length()<13){
-                    clearFields();
-                    return;
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    //no need
                 }
-                //Once we have an ISBN, start a book intent
-                Intent bookIntent = new Intent(getActivity(), BookService.class);
-                bookIntent.putExtra(BookService.EAN, ean);
-                bookIntent.setAction(BookService.FETCH_BOOK);
-                getActivity().startService(bookIntent);
-                AddBook.this.restartLoader();
-            }
-        });
 
-        rootView.findViewById(R.id.scan_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // This is the callback method that the system will invoke when your button is
-                // clicked. You might do this by launching another app or by including the
-                //functionality directly in this app.
-                // Hint: Use a Try/Catch block to handle the Intent dispatch gracefully, if you
-                // are using an external app.
-                //when you're done, remove the toast below.
-                Context context = getActivity();
-                CharSequence text = "This button should let you scan a book for its barcode!";
-                int duration = Toast.LENGTH_SHORT;
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String ean = s.toString();
+                    searchBookIntent(ean);
+                }
+            });
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+            rootView.findViewById(R.id.scan_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // This is the callback method that the system will invoke when your button is
+                    // clicked. You might do this by launching another app or by including the
+                    //functionality directly in this app.
+                    // Hint: Use a Try/Catch block to handle the Intent dispatch gracefully, if you
+                    // are using an external app.
+                    //when you're done, remove the toast below.
+                    Context context = getActivity();
+                    if(Utils.isNetworkAvailable(context)) {
+                        // launch barcode activity.
+                        Intent intent = new Intent(getActivity(), BarcodeCaptureActivity.class);
+                        intent.putExtra(BarcodeCaptureActivity.AutoFocus, true);
+                        intent.putExtra(BarcodeCaptureActivity.UseFlash, false);
 
-            }
-        });
+                        startActivityForResult(intent, RC_BARCODE_CAPTURE);
+                    }else{
+                        CharSequence text;
+                        text = "No Internet connection... \n try again later!";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
+                }
+            });
+        }else{
+            rootView.findViewById(R.id.addbook_no_connection).setVisibility(View.VISIBLE);
+            ean.setEnabled(false);
+            rootView.findViewById(R.id.scan_button).setEnabled(false);
+        }
+
+
 
         rootView.findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,6 +190,9 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         ((TextView) rootView.findViewById(R.id.bookSubTitle)).setText(bookSubTitle);
 
         String authors = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
+        if(authors == null){
+            authors = getString(R.string.no_author);
+        }
         String[] authorsArr = authors.split(",");
         ((TextView) rootView.findViewById(R.id.authors)).setLines(authorsArr.length);
         ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",","\n"));
@@ -203,5 +228,79 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         activity.setTitle(R.string.scan);
+    }
+
+    /**
+     * Called when an activity you launched exits, giving you the requestCode
+     * you started it with, the resultCode it returned, and any additional
+     * data from it. The <var>resultCode</var> will be RESULT_CANCELED if the activity explicitly returned that,
+     * didn't return any result, or crashed during its operation.
+     * <p/>
+     * <p>You will receive this call immediately before onResume() when your
+     * activity is re-starting.
+     * <p/>
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode  The integer result code returned by the child activity
+     *                    through its setResult().
+     * @param data        An Intent, which can return result data to the caller
+     *                    (various data can be attached to Intent "extras").
+     * @see #startActivityForResult
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_BARCODE_CAPTURE) {
+            if (resultCode == CommonStatusCodes.SUCCESS) {
+                if (data != null) {
+                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+//                    Toast.makeText(getActivity(), "Read Barcode :: "+barcode.displayValue
+//                            , Toast.LENGTH_LONG).show();
+//                    searchBookIntent(barcode.displayValue);
+                    ean.setText(barcode.displayValue);
+//                    statusMessage.setText(R.string.barcode_success);
+//                    barcodeValue.setText(barcode.displayValue);
+                } else {
+//                    statusMessage.setText(R.string.barcode_failure);
+                    Log.d(TAG, "No barcode captured, intent data is null");
+                    Toast.makeText(getActivity(),  "No barcode captured, intent data is null"
+                            , Toast.LENGTH_LONG).show();
+                }
+            } else {
+//                statusMessage.setText(String.format(getString(R.string.barcode_error),
+//                        CommonStatusCodes.getStatusCodeString(resultCode)));
+                Toast.makeText(getActivity(),  "No barcode captured :: "
+                        + CommonStatusCodes.getStatusCodeString(resultCode)
+                        , Toast.LENGTH_LONG).show();
+            }
+        }
+        else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    public void searchBookIntent(String sEan){
+        //catch isbn10 numbers
+        if(sEan != null) {
+            if (sEan.length() == 10 && !sEan.startsWith("978")) {
+                sEan = "978" + sEan;
+            }
+            if (sEan.length() < 13) {
+                clearFields();
+                return;
+            }
+            Log.d(TAG, "Starting Intent: " + sEan);
+            //Once we have an ISBN, start a book intent
+            Intent bookIntent = new Intent(getActivity(), BookService.class);
+            bookIntent.putExtra(BookService.EAN, sEan);
+            bookIntent.setAction(BookService.FETCH_BOOK);
+            getActivity().startService(bookIntent);
+
+            this.restartLoader();
+//            AddBook.this.restartLoader();
+        }else{
+            Snackbar.make(rootView, "Error scanning Book", Snackbar.LENGTH_SHORT).show();
+        }
     }
 }

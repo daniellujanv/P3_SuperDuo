@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="jacocoagent2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Alexandria/app/build/intermediates/jacoco/jacocoagent.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -122,8 +122,15 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_gravity="bottom"
                 />
-
         </LinearLayout>
-
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/addbook_no_connection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:text="@string/connect_to_internet"
+        />
 </FrameLayout>

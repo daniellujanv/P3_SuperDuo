@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/topLayout"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true">
+
+  <it.jaschke.alexandria.barcodeDetection.camera.CameraSourcePreview
+      android:id="@+id/preview"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+    <it.jaschke.alexandria.barcodeDetection.camera.GraphicOverlay
+        android:id="@+id/graphicOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+  </it.jaschke.alexandria.barcodeDetection.camera.CameraSourcePreview>
+
+    <FrameLayout
+        android:layout_width="230dp"
+        android:layout_height="150dp"
+        android:background="@android:color/transparent"
+        android:layout_gravity="bottom|end"
+        android:id="@+id/layout_foundbook"
+        android:visibility="invisible"
+        >
+        <Button
+            android:id="@+id/button_foundbook"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Add Book"
+            />
+    </FrameLayout>
+</FrameLayout>
