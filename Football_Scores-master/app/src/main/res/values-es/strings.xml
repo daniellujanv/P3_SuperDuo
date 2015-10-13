@@ -27,4 +27,7 @@
     <string name="today">Hoy</string>
     <string name="tomorrow">Mañana</string>
     <string name="yesterday">Ayer</string>
+    <string name="cd_list_item">Click para ver detalles</string>
+    <string name="cd_list_item_widget">Click para ver en app</string>
+    <string name="cd_share_button">Botón de compartir</string>
 </resources>
