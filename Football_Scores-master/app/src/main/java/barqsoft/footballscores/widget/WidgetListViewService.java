@@ -1,8 +1,6 @@
 package barqsoft.footballscores.widget;
 
 import android.annotation.TargetApi;
-import android.app.PendingIntent;
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,11 +15,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import barqsoft.footballscores.MainActivity;
 import barqsoft.footballscores.R;
-import barqsoft.footballscores.Utilies;
+import barqsoft.footballscores.utils.Utilies;
 import barqsoft.footballscores.data.DatabaseContract;
-import barqsoft.footballscores.scoresAdapter;
+import barqsoft.footballscores.adapters.ScoresAdapter;
 
 /**
  * Created by daniellujanvillarreal on 10/9/15.
@@ -71,17 +68,17 @@ class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
         mCursor.moveToPosition(position);
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.scores_list_item_widget);
 
-        rv.setTextViewText(R.id.home_name, mCursor.getString(scoresAdapter.COL_HOME));
-        rv.setTextViewText(R.id.away_name, mCursor.getString(scoresAdapter.COL_AWAY));
-        rv.setTextViewText(R.id.data_textview, mCursor.getString(scoresAdapter.COL_MATCHTIME));
+        rv.setTextViewText(R.id.home_name, mCursor.getString(ScoresAdapter.COL_HOME));
+        rv.setTextViewText(R.id.away_name, mCursor.getString(ScoresAdapter.COL_AWAY));
+        rv.setTextViewText(R.id.data_textview, mCursor.getString(ScoresAdapter.COL_MATCHTIME));
         rv.setTextViewText(R.id.score_textview,
-                Utilies.getScores(mCursor.getInt(scoresAdapter.COL_HOME_GOALS)
-                        , mCursor.getInt(scoresAdapter.COL_AWAY_GOALS)));
-        rv.setTextViewText(R.id.away_name, mCursor.getString(scoresAdapter.COL_AWAY));
+                Utilies.getScores(mCursor.getInt(ScoresAdapter.COL_HOME_GOALS)
+                        , mCursor.getInt(ScoresAdapter.COL_AWAY_GOALS)));
+        rv.setTextViewText(R.id.away_name, mCursor.getString(ScoresAdapter.COL_AWAY));
         rv.setImageViewResource(R.id.home_crest, Utilies.getTeamCrestByTeamName(
-                mCursor.getString(scoresAdapter.COL_HOME)));
+                mCursor.getString(ScoresAdapter.COL_HOME)));
         rv.setImageViewResource(R.id.away_crest, Utilies.getTeamCrestByTeamName(
-                mCursor.getString(scoresAdapter.COL_AWAY)));
+                mCursor.getString(ScoresAdapter.COL_AWAY)));
 
 // Next, set a fill-intent, which will be used to fill in the pending intent template
         // that is set on the collection view in StackWidgetProvider.
@@ -90,7 +87,7 @@ class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date;
         try {
-            date = dateFormat.parse(mCursor.getString(scoresAdapter.COL_DATE));
+            date = dateFormat.parse(mCursor.getString(ScoresAdapter.COL_DATE));
         } catch (ParseException e) {
             e.printStackTrace();
             date = new Date();

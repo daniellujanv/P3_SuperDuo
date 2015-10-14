@@ -7,7 +7,6 @@
     <string name="bundesliga">Bundesliga</string>
     <string name="about_text">Esta applicación obtiene resultados de partidos de las ligas Premier, Serie A, Bundesliga, Primera División de España y la Liga de Campeones de la UEFA. Todos los partidos son obtenidos de la API gratis de football-data.org. Los logos de los equipos son obtenidos de http://hdlogo.wordpress.com/ con el consentimiento del usuario.  La versión original de esta App fue creada por Yahia Khalid Ibn El Salid Ahmed, y una versión modificada es entregada a los estudiantes del programa Udacity Android Nanodegree. Para reportar fallas o dar sugerencias por favor mandar mail la y.k.ibnelwalid@gmail.com.  En el tiempo inactivo de las ligas, datos no reales serán agregados a la app.</string>
     <string name="action_settings">Ajustes</string>
-    <string name="dummy_data" translatable="false"></string>
     <string name="first_knockout_round">Primera fase de descalificación</string>
     <string name="group_stage_text">Fase de grupos</string>
     <string name="matchday_text">Día del partido</string>

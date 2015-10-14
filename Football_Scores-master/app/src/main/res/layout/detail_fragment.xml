@@ -41,10 +41,10 @@
             android:id="@+id/share_button"
             android:drawableStart="@android:drawable/ic_menu_share"
             android:drawableLeft="@android:drawable/ic_menu_share"
-            android:paddingLeft="120dp"
-            android:paddingStart="120dp"
-            android:paddingEnd="120dp"
-            android:paddingRight="120dp"
+            android:paddingLeft="@dimen/share_button_padding"
+            android:paddingStart="@dimen/share_button_padding"
+            android:paddingEnd="@dimen/share_button_padding"
+            android:paddingRight="@dimen/share_button_padding"
             android:contentDescription="@string/cd_share_button"
             />
     </FrameLayout>
