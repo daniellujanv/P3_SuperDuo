@@ -219,6 +219,7 @@ public class BookService extends IntentService {
             getContentResolver().insert(AlexandriaContract.AuthorEntry.CONTENT_URI, values);
             values= new ContentValues();
         }
+
     }
 
     private void writeBackCategories(String ean, JSONArray jsonArray) throws JSONException {
